@@ -4,29 +4,27 @@ import java.util.*;
 
 public class Graph {
 
-    private final Map<String, List<String>> graph = new HashMap<>();
+    private final Map<String, Set<String>> graph = new HashMap<>();
 
     public void addVertex(String vertex) {
-        graph.putIfAbsent(vertex, new ArrayList<>());
+
+        graph.putIfAbsent(vertex, new HashSet<>());
     }
 
     public boolean hasVertex(String vertex) {
-        if(graph.get(vertex) == null) {
-            return false;
-        };
 
-        return true;
+        return graph.get(vertex) != null;
     }
 
     public void addEdge(String source, String destination) {
-        if(hasVertex(source) && hasVertex(destination)) {
-            graph.get(source).add(destination);
-        }
+        addVertex(source);
+        addVertex(destination);
+        graph.get(source).add(destination);
     }
 
     public boolean hasEdge(String source, String destination) {
-        if(hasVertex(source) && hasVertex(destination)) {
-            List<String> listEdges = graph.get(source);
+        if (hasVertex(source) && hasVertex(destination)) {
+            Set<String> listEdges = graph.get(source);
             return listEdges.contains(destination);
         }
 
@@ -34,19 +32,20 @@ public class Graph {
     }
 
     public void removeVertex(String vertex) {
-        if(!hasVertex(vertex)) {
+        if (!hasVertex(vertex)) {
             return;
         }
 
-        graph.remove(vertex);
-        for (List<String> listEdges : graph.values()) {
+        for (Set<String> listEdges : graph.values()) {
             listEdges.remove(vertex);
         }
+
+        graph.remove(vertex);
     }
 
     public void removeEdge(String source, String destination) {
-        if(hasVertex(source) && hasVertex(destination)) {
-            List<String> listEdges = graph.get(source);
+        if (hasVertex(source) && hasVertex(destination)) {
+            Set<String> listEdges = graph.get(source);
             listEdges.remove(destination);
         }
     }
